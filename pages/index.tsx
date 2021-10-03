@@ -1,8 +1,22 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
+import { supabase } from 'utils/supabaseClient';
+import Auth from 'components/supabase/Auth';
+import Account from 'components/supabase/Account';
 import styles from '/styles/Home.module.css';
+import { useEffect, useState } from 'react';
 
 const Home: NextPage = () => {
+    const [session, setSession] = useState(null);
+
+    useEffect(() => {
+        setSession(supabase.auth.session());
+
+        supabase.auth.onAuthStateChange((_event, session) => {
+            setSession(session);
+        });
+    }, []);
+
     return (
         <div className={styles.container}>
             <Head>
@@ -14,6 +28,7 @@ const Home: NextPage = () => {
                 <h1 className={styles.title}>Base supabase nextJS app</h1>
 
                 <p>put some stuff here</p>
+                {!session ? <Auth /> : <Account key={session.user.id} session={session} />}
             </main>
 
             <footer className={styles.footer}>
