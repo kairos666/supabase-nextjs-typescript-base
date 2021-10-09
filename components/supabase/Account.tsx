@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from 'utils/supabaseClient';
+import Avatar from './Avatar';
 
 export default function Account({ session }:any) {
     const [loading, setLoading] = useState(true);
@@ -78,6 +79,14 @@ export default function Account({ session }:any) {
                     onChange={(e) => setUsername((e as any).target.value)}
                 />
             </div>
+            <Avatar
+                url={avatar_url}
+                size={150}
+                onUpload={(url:string) => {
+                    setAvatarUrl(url);
+                    updateProfile({ username, website, avatar_url: url });
+                }}
+            />
             <div>
                 <label htmlFor="website">Website</label>
                 <input
